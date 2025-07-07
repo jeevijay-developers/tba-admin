@@ -41,14 +41,6 @@ const Gallery = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleViewGallery = (gallery) => {
-    // Create a simple modal or alert to view gallery details
-    const imageCount = gallery.images?.length || 0;
-    const imageList = gallery.images?.map((img, index) => `Image ${index + 1}: ${img.url}`).join('\n') || 'No images';
-    
-    alert(`Gallery: ${gallery.title}\n\nTotal Images: ${imageCount}\n\nImages:\n${imageList}`);
-  };
-
   const handleModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedGallery(null);
@@ -99,7 +91,6 @@ const Gallery = () => {
                 key={gallery._id}
                 gallery={gallery}
                 onEdit={handleEditGallery}
-                onView={handleViewGallery}
               />
             ))}
           </div>
