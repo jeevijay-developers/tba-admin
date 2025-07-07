@@ -45,6 +45,8 @@ export default function Home() {
   const handleModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedEvent(null);
+    // Refresh events when edit modal closes (in case event was updated)
+    fetchEvents();
   };
 
   const handleEventModalClose = () => {
