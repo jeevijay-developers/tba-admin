@@ -1,8 +1,11 @@
 "use client";
 
-import apiCLient from '@/server/config';
+import apiClient from '@/server/config';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -12,7 +15,17 @@ export default function Login() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const adminUser = localStorage.getItem('adminUser');
+    if (adminUser) {
+      router.push('/');
+    }
+  }, [router]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -27,25 +40,29 @@ export default function Login() {
     setError('');
     
     try {
-      // Replace with actual API call when backend is ready
-      const response = await apiCLient.post('/api/auth/login-user', {
+      const response = await apiClient.post('/api/auth/login-user', {
         username: formData.username,
         password: formData.password
       });
       
-      if (!response.ok) {
-        throw new Error('Login failed. Please check your credentials.');
+      console.log('Response:', response.data);
+      
+      if(response.data.user.role === 'admin'){
+        localStorage.setItem('adminUser', JSON.stringify(response.data.user));
+        toast.success('Login successful!');
+        router.push('/');
+      } else {
+        toast.error('You are not authorized to access this page');
       }
-      
-      const data = await response.json();
-      localStorage.setItem('adminToken', data.token);
-      router.push('/');
-      
-      console.log('Login submitted:', formData);
-
     } catch (err) {
-      setError(err.message || 'An error occurred during login');
+      console.error('Login error:', err);
+      toast.error(err.response.data.message || 'Login failed. Please check your credentials.')
+    } finally {
       setIsLoading(false);
+      setFormData({
+        username: '',
+        password: ''
+      });
     }
   };
 
@@ -88,16 +105,29 @@ export default function Login() {
             <label htmlFor="password" className="mb-2 block text-sm font-medium text-foreground">
               Password
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full rounded-md border border-gray-300 bg-background p-2.5 text-sm text-foreground focus:border-[#ff8547] focus:outline-none focus:ring-2 focus:ring-[#ff8547]/50 dark:border-gray-600 dark:focus:border-[#ff8547]"
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full rounded-md border border-gray-300 bg-background p-2.5 pr-10 text-sm text-foreground focus:border-[#ff8547] focus:outline-none focus:ring-2 focus:ring-[#ff8547]/50 dark:border-gray-600 dark:focus:border-[#ff8547]"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+              >
+                {showPassword ? (
+                  <FaRegEye />
+                ) : (
+                  <FaRegEyeSlash />
+                )}
+              </button>
+            </div>
           </div>
           
           <button
