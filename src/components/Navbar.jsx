@@ -45,7 +45,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* Logo Section */}
           <div className="flex items-center" onClick={() => router.push('/')}>
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 cursor-pointer">
               <Image
                 src="/logo/logo.png"
                 alt="Logo"
@@ -66,14 +66,14 @@ const Navbar = () => {
                 router.push(`/${isHome ? 'gallery' : ''}`);
                 setIsHome(!isHome)
               }}
-              className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
+              className=" cursor-pointer flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
               {isHome ? 'Gallery' : 'Home'}
             </button>
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              className=" cursor-pointer flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
             >
               <MdLogout className="w-4 h-4" />
               Logout
