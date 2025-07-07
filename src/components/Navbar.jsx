@@ -6,6 +6,8 @@ import EventModal from './EventModal';
 import GalleryModal from './GalleryModal';
 import { useRouter } from 'next/navigation';
 import { IoAdd } from 'react-icons/io5'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { MdPhotoLibrary, MdLogout } from 'react-icons/md'
 
 const Navbar = () => {
@@ -24,13 +26,26 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
-    // Remove admin user from localStorage
-    localStorage.removeItem('adminUser');
-    // You might want to redirect to login page here
-    router.push('/login');
-    toast.success('Logged out successfully!');
-    console.log('Logout clicked')
-    setIsMenuOpen(false) // Close menu after action
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Logout',
+          onClick: () => {
+            localStorage.removeItem('adminUser');
+            router.push('/login');
+            toast.success('Logged out successfully!');
+            setIsMenuOpen(false) // Close menu after action
+          }
+        },
+        {
+          label: 'Cancel',
+          onClick: () => {}
+        }
+      ]
+    });
+
   }
 
   const toggleMenu = () => {
@@ -53,16 +68,13 @@ const Navbar = () => {
                 priority
               />
             </div>
-            <div className="ml-3 hidden sm:block">
-              <h1 className="text-lg lg:text-xl font-semibold text-gray-800">TBA Admin</h1>
-            </div>
           </div>
 
           {/* Desktop Navigation Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
             <button
               onClick={handleAddEvent}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
               <IoAdd className="w-4 h-4" />
               Add Event
@@ -70,7 +82,7 @@ const Navbar = () => {
 
             <button
               onClick={handleAddGallery}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
               <IoAdd className="w-4 h-4" />
               Add Gallery
@@ -78,7 +90,7 @@ const Navbar = () => {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
             >
               <MdLogout className="w-4 h-4" />
               Logout
@@ -130,28 +142,25 @@ const Navbar = () => {
         </div>
 
         {/* Mobile menu */}
-        <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden pb-4`}>
+        <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden pb-4 flex flex-col space-y-3 border-t border-gray-200`}>
           <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3">
-            {/* Mobile title for smaller screens */}
-            <div className="sm:hidden mb-3">
-              <h1 className="text-lg font-semibold text-gray-800">TBA Admin</h1>
+            <div className="flex flex-row gap-3">
+              <button
+                onClick={handleAddEvent}
+                className="w-full flex items-center gap-3 bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
+              >
+                <IoAdd className="w-5 h-5" />
+                Add Event
+              </button>
+
+              <button
+                onClick={handleAddGallery}
+                className="w-full flex items-center gap-3 bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
+              >
+                <IoAdd className="w-5 h-5" />
+                Add Gallery
+              </button>
             </div>
-
-            <button
-              onClick={handleAddEvent}
-              className="w-full flex items-center gap-3 bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
-            >
-              <IoAdd className="w-5 h-5" />
-              Add Event
-            </button>
-
-            <button
-              onClick={handleAddGallery}
-              className="w-full flex items-center gap-3 bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
-            >
-              <IoAdd className="w-5 h-5" />
-              Add Gallery
-            </button>
 
             <button
               onClick={handleLogout}
