@@ -15,7 +15,8 @@ const Navbar = () => {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const router = useRouter();
-  const handleAddEvent = () => {
+
+        const handleAddEvent = () => {
     setIsEventModalOpen(true);
     setIsMenuOpen(false) // Close menu after action
   }
@@ -73,13 +74,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
-            <button
-              onClick={handleAddEvent}
-              className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
-            >
-              <IoAdd className="w-4 h-4" />
-              Add Event
-            </button>
+
 
             <button
               onClick={handleAddGallery}
