@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning={true}
       > 
        <Navbar />
+       
         {children}
        
         <Toaster />

@@ -53,9 +53,7 @@ const Navbar = () => {
                 priority
               />
             </div>
-            <div className="ml-3 hidden sm:block">
-              <h1 className="text-lg lg:text-xl font-semibold text-gray-800">TBA Admin</h1>
-            </div>
+            
           </div>
 
           {/* Desktop Navigation Buttons */}
