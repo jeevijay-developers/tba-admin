@@ -5,26 +5,16 @@ import toast from 'react-hot-toast'
 import EventModal from './EventModal';
 import GalleryModal from './GalleryModal';
 import { useRouter } from 'next/navigation';
-import { IoAdd } from 'react-icons/io5'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { MdPhotoLibrary, MdLogout } from 'react-icons/md'
+import { MdLogout } from 'react-icons/md'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [isHome, setIsHome] = useState(true);
   const router = useRouter();
-
-        const handleAddEvent = () => {
-    setIsEventModalOpen(true);
-    setIsMenuOpen(false) // Close menu after action
-  }
-
-  const handleAddGallery = () => {
-    setIsGalleryModalOpen(true);
-    setIsMenuOpen(false) // Close menu after action
-  }
 
   const handleLogout = () => {
     confirmAlert({
@@ -49,16 +39,12 @@ const Navbar = () => {
 
   }
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
   return (
     <nav className="bg-white shadow-md border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* Logo Section */}
-          <div className="flex items-center">
+          <div className="flex items-center" onClick={() => router.push('/')}>
             <div className="flex-shrink-0">
               <Image
                 src="/logo/logo.png"
@@ -75,14 +61,15 @@ const Navbar = () => {
           {/* Desktop Navigation Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
 
-
-            {/* <button
-              onClick={handleAddGallery}
+            <button
+              onClick={() => {
+                router.push(`/${isHome ? 'gallery' : ''}`);
+                setIsHome(!isHome)
+              }}
               className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
-              <IoAdd className="w-4 h-4" />
-              Add Gallery
-            </button> */}
+              {isHome ? 'Gallery' : 'Home'}
+            </button>
 
             <button
               onClick={handleLogout}
