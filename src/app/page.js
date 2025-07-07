@@ -42,10 +42,6 @@ export default function Home() {
     setIsEditModalOpen(true);
   };
 
-  const handleViewEvent = (event) => {
-    alert(`Viewing event: ${event.title}\n\nDescription: ${event.desc}\n\nBlog: ${event.blog.bhead}`);
-  };
-
   const handleModalClose = () => {
     setIsEditModalOpen(false);
     setSelectedEvent(null);
@@ -95,7 +91,6 @@ export default function Home() {
                 key={event._id}
                 event={event}
                 onEdit={handleEditEvent}
-                onView={handleViewEvent}
               />
             ))}
           </div>
