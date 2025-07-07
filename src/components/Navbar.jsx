@@ -50,6 +50,7 @@ const Navbar = () => {
                 width={50}
                 height={50}
                 className="h-12 w-auto lg:h-16"
+                priority
               />
             </div>
             <div className="ml-3 hidden sm:block">
