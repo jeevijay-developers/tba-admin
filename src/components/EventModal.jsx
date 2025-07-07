@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FaTimes, FaUpload } from 'react-icons/fa';
 import toast from 'react-hot-toast';
-import apiClient from '@/server/config';
+import { eventGalleryService, handleApiError } from '@/server/service';
 
 export default function EventModal({ isOpen, onClose, initialData = null }) {
   const [formData, setFormData] = useState({
@@ -92,55 +92,59 @@ export default function EventModal({ isOpen, onClose, initialData = null }) {
       toast.error('Blog content is required');
       return;
     }
-    if (!bannerImageFile && !formData.bannerImage) {
-      toast.error('Banner image is required');
-      return;
-    }
-    if (!blogImageFile && !formData.blog.bImage1) {
-      toast.error('Blog image is required');
-      return;
+
+    // For new events, images are required
+    if (!initialData) {
+      if (!bannerImageFile) {
+        toast.error('Banner image is required');
+        return;
+      }
+      if (!blogImageFile) {
+        toast.error('Blog image is required');
+        return;
+      }
     }
 
     setIsLoading(true);
 
     try {
-      // Create FormData for file uploads
-      const submitFormData = new FormData();
-      
-      // Add text fields
-      submitFormData.append('title', formData.title);
-      submitFormData.append('desc', formData.desc);
-      submitFormData.append('bhead', formData.blog.bhead);
-      submitFormData.append('blogPara1', formData.blog.blogPara1);
-      
-      // Add image files
-      if (bannerImageFile) {
+      if (initialData) {
+        // Update existing event (text fields only)
+        const updateData = {
+          _id: initialData._id,
+          title: formData.title,
+          desc: formData.desc,
+          blog: {
+            bhead: formData.blog.bhead,
+            blogPara1: formData.blog.blogPara1,
+            bImage1: formData.blog.bImage1 // Keep existing image URL
+          }
+        };
+
+        await eventGalleryService.update(updateData);
+        toast.success('Event updated successfully!');
+      } else {
+        // Create new event
+        const submitFormData = new FormData();
+        
+        // Add text fields
+        submitFormData.append('title', formData.title);
+        submitFormData.append('desc', formData.desc);
+        submitFormData.append('bhead', formData.blog.bhead);
+        submitFormData.append('blogPara1', formData.blog.blogPara1);
+        
+        // Add image files
         submitFormData.append('bannerImage', bannerImageFile);
-      }
-      if (blogImageFile) {
         submitFormData.append('bImage1', blogImageFile);
+
+        await eventGalleryService.create(submitFormData);
+        toast.success('Event created successfully!');
       }
       
-      const method = initialData ? 'put' : 'post';
-
-      const response = await apiClient[method]('/api/v1/event-gallery', submitFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      toast.success(
-        initialData 
-          ? 'Event updated successfully!' 
-          : 'Event created successfully!'
-      );
       handleClose();
     } catch (error) {
-      console.error('Error submitting event:', error);
-      toast.error(
-        error.response?.data?.message || 
-        'Failed to save event. Please try again.'
-      );
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
