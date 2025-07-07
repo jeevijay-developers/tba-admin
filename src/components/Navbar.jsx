@@ -1,24 +1,32 @@
 "use client";
 import React, { useState } from 'react'
 import Image from 'next/image'
+import toast from 'react-hot-toast'
+import EventModal from './EventModal';
+import GalleryModal from './GalleryModal';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const router = useRouter();
   const handleAddEvent = () => {
-    // Add event functionality
-    console.log('Add Event clicked')
+    setIsEventModalOpen(true);
     setIsMenuOpen(false) // Close menu after action
   }
 
   const handleAddGallery = () => {
-    // Add gallery functionality
-    console.log('Add Gallery clicked')
+    setIsGalleryModalOpen(true);
     setIsMenuOpen(false) // Close menu after action
   }
 
   const handleLogout = () => {
-    // Logout functionality
+    // Remove admin user from localStorage
+    localStorage.removeItem('adminUser');
+    // You might want to redirect to login page here
+    router.push('/login');
+    toast.success('Logged out successfully!');
     console.log('Logout clicked')
     setIsMenuOpen(false) // Close menu after action
   }
@@ -55,14 +63,14 @@ const Navbar = () => {
             >
               Add Event
             </button>
-            
+
             <button
               onClick={handleAddGallery}
               className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Add Gallery
             </button>
-            
+
             <button
               onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -122,21 +130,21 @@ const Navbar = () => {
             {/* <div className="sm:hidden mb-3">
               <h1 className="text-lg font-semibold text-gray-800">TBA Admin</h1>
             </div> */}
-            
+
             <button
               onClick={handleAddEvent}
-              className="w-full text-left bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full text-left bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
               Add Event
             </button>
-            
+
             <button
               onClick={handleAddGallery}
-              className="w-full text-left bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="w-full text-left bg-[#ff8547] hover:bg-[#e67a40] text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
             >
               Add Gallery
             </button>
-            
+
             <button
               onClick={handleLogout}
               className="w-full text-left bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -146,6 +154,22 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Event Modal - placed outside nav structure so it appears on both desktop and mobile */}
+      {isEventModalOpen && (
+        <EventModal
+          isOpen={isEventModalOpen}
+          onClose={() => setIsEventModalOpen(false)}
+        />
+      )}
+
+      {/* Gallery Modal */}
+      {isGalleryModalOpen && (
+        <GalleryModal
+          isOpen={isGalleryModalOpen}
+          onClose={() => setIsGalleryModalOpen(false)}
+        />
+      )}
     </nav>
   )
 }
