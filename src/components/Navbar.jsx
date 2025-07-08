@@ -63,6 +63,16 @@ const Navbar = () => {
 
             <button
               onClick={() => {
+                router.push("/members");
+                setIsHome(!isHome)
+              }}
+              className="flex items-center gap-2 bg-[#f97432] hover:bg-[#e67a40] text-white px-3 py-2 lg:px-4 rounded-md text-sm font-medium transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#e67a40] focus:ring-offset-2"
+            >
+              Members
+            </button>
+
+            <button
+              onClick={() => {
                 router.push(`/${isHome ? 'gallery' : ''}`);
                 setIsHome(!isHome)
               }}
