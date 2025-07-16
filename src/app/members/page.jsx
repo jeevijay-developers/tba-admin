@@ -1,9 +1,12 @@
 import Members from '@/components/Members'
+import ProtectedRoute from '@/components/ProtectedRoute'
 import React from 'react'
 
 const page = () => {
   return (
-    <Members />
+    <ProtectedRoute>
+      <Members />
+    </ProtectedRoute>
   )
 }
 

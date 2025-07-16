@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import EventModal from "./EventModal";
 import GalleryModal from "./GalleryModal";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { MdLogout } from "react-icons/md";
@@ -15,6 +16,7 @@ const Navbar = () => {
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [isHome, setIsHome] = useState(true);
   const router = useRouter();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     confirmAlert({
@@ -24,8 +26,7 @@ const Navbar = () => {
         {
           label: "Logout",
           onClick: () => {
-            localStorage.removeItem("adminUser");
-            router.push("/login");
+            logout();
             toast.success("Logged out successfully!");
             setIsMenuOpen(false); // Close menu after action
           },

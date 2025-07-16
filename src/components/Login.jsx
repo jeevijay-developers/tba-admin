@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -17,14 +18,14 @@ export default function Login() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const { login, isAuthenticated } = useAuth();
 
   // Check if user is already logged in
   useEffect(() => {
-    const adminUser = localStorage.getItem('adminUser');
-    if (adminUser) {
+    if (isAuthenticated) {
       router.push('/');
     }
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +49,7 @@ export default function Login() {
       console.log('Response:', response.data);
       
       if(response.data.user.role === 'admin'){
-        localStorage.setItem('adminUser', JSON.stringify(response.data.user));
+        login(response.data.user);
         toast.success('Login successful!');
         router.push('/');
       } else {
